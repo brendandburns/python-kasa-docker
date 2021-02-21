@@ -1,0 +1,32 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: kasa-on
+  namespace: default
+spec:
+  schedule: "0 16 * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: kasa-on
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: kasa
+            image: brendanburns/python-docker-kasa:v1
+            imagePullPolicy: Always
+            command:
+            - kasa
+            - --host
+            - 192.168.2.6
+            - --strip
+            - "on"
+            volumeMounts:
+            - name: tz-seattle
+              mountPath: /etc/localtime
+          volumes:
+          - name: tz-seattle
+            hostPath:
+              path: /usr/share/zoneinfo/US/Pacific
