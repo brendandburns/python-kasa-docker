@@ -1,0 +1,81 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.0.min.js"></script>
+    <script lang="javascript"> 
+        function addSwitch(on, name, desc) {
+            var label = document.createElement('label');
+            label.className = 'mdl-switch mdl-js-switch mdl-js-ripple-effect';
+            label.for = name;
+
+            var span = document.createElement('span');
+            span.className = 'mdl-switch__label';
+            span.appendChild(document.createTextNode(desc));
+
+            var input = document.createElement('input');
+            input.type = 'checkbox';
+            input.id = name;
+            input.className = 'mdl-switch__input';
+            input.checked = on;
+            input.onclick = () => handleClick(name);
+
+            label.appendChild(span);
+            label.appendChild(input);
+
+            componentHandler.upgradeElement(label);
+            var container = document.getElementById('switches');
+            container.appendChild(label);
+            container.appendChild(document.createElement('p'));
+        }
+
+        function setSwitchStatus(status, which, desc) {
+            let on = false;
+            if (status === 'on') {
+                on = true;
+            }
+            if (status === 'off') {
+                on = false;
+            }
+
+            addSwitch(on, which, desc);
+        }
+
+        function handleClick(which) {
+            const elt = document.querySelector('#' + which);
+            if (elt.checked) {
+                $.ajax('/on?which='+which).done();
+            } else {
+                $.ajax('/off?which='+which).done();
+            }
+        }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <span class="mdl-layout-title">Entry</span>
+            </div>
+        </header>
+        <main class="mdl-layout__content" style="padding: 10px 30px">
+            <div class="mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Switches</h2>
+                </div>
+                <div class="mdl-card__supporting-text" id='switches'>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script lang="javascript">
+        $.ajax('/status?which=entry').done((obj) => setSwitchStatus(obj, 'entry', 'Entry Light'));
+        $.ajax('/status?which=tree').done((obj) => setSwitchStatus(obj, 'tree', 'Christmas Tree'));
+    </script>
+</body>
+
+</html>

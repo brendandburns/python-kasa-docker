@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: entry-light
+  labels:
+    app: entry-light
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: entry-light
+  template:
+    metadata:
+      labels:
+        app: entry-light
+      annotations:
+        prometheus.io/scrape: "true"
+    spec:
+      imagePullSecrets:
+      - name: pull-secret
+      containers:
+      - name: entry-light
+        image: burns.azurecr.io/light-switch:v3
+        command:
+        - python
+        - /src/server.py
+        volumeMounts:
+        - name: tz-seattle
+          mountPath: /etc/localtime
+      volumes:
+      - name: tz-seattle
+        hostPath:
+          path: /usr/share/zoneinfo/US/Pacific
