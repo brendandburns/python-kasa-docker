@@ -20,7 +20,7 @@ spec:
       - name: pull-secret
       containers:
       - name: entry-light
-        image: burns.azurecr.io/light-switch:v3
+        image: burns.azurecr.io/light-switch:v4
         command:
         - python
         - /src/server.py
