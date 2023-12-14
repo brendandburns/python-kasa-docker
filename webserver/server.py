@@ -15,6 +15,7 @@ class MyHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         dev = SmartBulb("192.168.2.25")
         tree = SmartPlug("192.168.2.9")
+        outdoor = SmartPlug("192.168.2.6")
 
         req = urllib.parse.urlparse(self.path)
         query = urllib.parse.parse_qs(req.query)
@@ -32,6 +33,8 @@ class MyHandler(BaseHTTPRequestHandler):
 
         if 'which' in query and query['which'][0] == 'tree':
             which = tree
+        if 'which' in query and query['which'][0] == 'outdoor':
+            which = outdoor
         else:
             which = dev
 

@@ -75,6 +75,7 @@
     <script lang="javascript">
         $.ajax('/status?which=entry').done((obj) => setSwitchStatus(obj, 'entry', 'Entry Light'));
         $.ajax('/status?which=tree').done((obj) => setSwitchStatus(obj, 'tree', 'Christmas Tree'));
+        $.ajax('/status?which=tree').done((obj) => setSwitchStatus(obj, 'outdoor', 'Outdoor Christmas Lights'));
     </script>
 </body>
 
